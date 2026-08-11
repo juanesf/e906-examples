@@ -1,0 +1,6 @@
+#!/bin/bash
+# Build the E906 "MPU6050 + LCD" example (A523/T527).
+set -e
+cd "$(dirname "$(readlink -f "$0")")/mpu6050-lcd"
+make -s all
+echo "OK: $(pwd)/e906-mpu6050.elf"

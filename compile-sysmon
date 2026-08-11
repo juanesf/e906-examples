@@ -1,0 +1,6 @@
+#!/bin/bash
+# Build the E906 "System Monitor" example (A523/T527).
+set -e
+cd "$(dirname "$(readlink -f "$0")")/sysmon"
+make -s all
+echo "OK: $(pwd)/e906-sysmon.elf"

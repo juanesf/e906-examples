@@ -1,0 +1,6 @@
+#!/bin/bash
+# Build the E906 "hello world" example (A523/T527 co-processor).
+set -e
+cd "$(dirname "$(readlink -f "$0")")/hello"
+make -s all
+echo "OK: $(pwd)/e906-hello.elf"

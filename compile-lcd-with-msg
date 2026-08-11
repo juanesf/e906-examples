@@ -1,0 +1,6 @@
+#!/bin/bash
+# Build the E906 "LCD gradient + ARM message panel" example (A523/T527).
+set -e
+cd "$(dirname "$(readlink -f "$0")")/lcd-with-msg"
+make -s all
+echo "OK: $(pwd)/e906-lcd-msg.elf"

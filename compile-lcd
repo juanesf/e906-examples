@@ -1,0 +1,6 @@
+#!/bin/bash
+# Build the E906 "LCD gradient" example (A523/T527 co-processor).
+set -e
+cd "$(dirname "$(readlink -f "$0")")/lcd"
+make -s all
+echo "OK: $(pwd)/e906-lcd.elf"
