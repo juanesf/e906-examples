@@ -77,13 +77,19 @@ sudo devmem 0x60000040 16  # "HELLO WORLD FROM E906 CO-PROCESSOR!"
 ```
 
 It also prints the message over S-UART0 @ 115200 8N1 (header pin 37 =
-TX / SoC PM0).
+TX / SoC PM0).  Photos of the serial setup:
+
+![Serial print](hello/serial-print.jpeg)
+![USB-serial adapter](hello/serial-usb-adapter.jpeg)
+![Serial port / GPIO header](hello/serial-port-gpio.jpeg)
 
 ### lcd — gradient on the ST7789V
 
 Drives the on-board 240x135 ST7789V LCD via S_SPI0 with no ARM help: animated
 RGB gradient, moving white bar, frame counter.  Also keeps the mailbox
 magic/counter for the ARM to read.
+
+![Gradient](lcd/gradient.jpeg)
 
 ### lcd-with-msg — gradient + ARM message panel
 
@@ -99,6 +105,8 @@ Run `mbox_info.py` on the ARM to feed it:
 sudo python3 mbox_info.py    # writes LOAD / IP / UP / version lines
 ```
 
+![Gradient + message panel](lcd-with-msg/gradient-with-msg.mp4)
+
 The E906 polls `seq` every ~16 frames and redraws the panel.  Mailbox header
 (E906 -> ARM): `+0x00` magic `0xE9061B0B`, `+0x04` version, `+0x08` flags,
 `+0x0C` frame counter, `+0x10` result, `+0x14` error step.
@@ -107,6 +115,8 @@ The E906 polls `seq` every ~16 frames and redraws the panel.  Mailbox header
 
 Same LCD wiring as `lcd`, reading a GY-521 (MPU6050) IMU over TWI/SMBus and
 rendering the measured orientation on the display.
+
+![MPU6050 + LCD](mpu6050-lcd/mpu6050-lcd.jpeg)
 
 ### sysmon — system monitor dashboard (mailbox v3)
 
@@ -118,6 +128,8 @@ service `e906-sysmon.service`), which pushes metrics every second:
 ```sh
 sudo python3 sysmon/mbox_sysmon.py   # daemon; reads /sys/class/thermal
 ```
+
+![sysmon dashboard](sysmon/sysmon-dashboard.jpeg)
 
 Mailbox v3 layout (reserved DDR @ 0x60000000, all offsets 4-byte aligned):
 
