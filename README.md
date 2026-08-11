@@ -125,6 +125,12 @@ Mailbox v3 layout (reserved DDR @ 0x60000000, all offsets 4-byte aligned):
   unaligned reads/writes SIGBUS (mailbox readers must use word-at-a-time
   `struct.unpack_from`).
 
+## Acknowledgements
+
+Investigation and on-board testing for these examples (the E906 cache root
+cause, the mailbox protocol, the ST7789V wiring and the sysmon daemon) were
+carried out with the assistance of opencode.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
