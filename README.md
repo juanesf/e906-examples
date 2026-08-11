@@ -42,6 +42,27 @@ The E906 boots from the ELF entry point (`0x3ffc0000`).  The DT reserves:
 `riscvsram0` `0x3ffc0000 -> 0x07280000` (0x40000) and the DDR mailbox carveout
 at `0x60000000`.
 
+## Autostart at boot
+
+Whatever ELF is stored at `/lib/firmware/rproc-7130000.e906_rproc-fw` is the
+firmware loaded at boot: the `e906-rproc.service` unit (oneshot) waits for
+`/sys/class/remoteproc/remoteproc0/state` to appear and then writes `start`,
+which makes the kernel load that ELF into the E906.
+
+Only one firmware can be the boot firmware. To switch to another example:
+
+```sh
+sudo cp /lib/firmware/rproc-7130000.e906_rproc-fw{,.prev}   # keep current
+sudo cp e906-sysmon.elf /lib/firmware/rproc-7130000.e906_rproc-fw
+echo stop  | sudo tee /sys/class/remoteproc/remoteproc0/state   # reload now
+echo start | sudo tee /sys/class/remoteproc/remoteproc0/state
+```
+
+(or just reboot). Examples whose UI depends on the ARM host need a matching
+systemd service that feeds the mailbox, e.g. `e906-sysmon.service` runs
+`mbox_sysmon.py` for the sysmon dashboard; feed `lcd-with-msg` the same way
+with `mbox_info.py`. Only enable one feeder at a time.
+
 ## Examples
 
 ### hello — "hello world" from the E906 co-processor
