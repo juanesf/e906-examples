@@ -49,7 +49,21 @@ firmware loaded at boot: the `e906-rproc.service` unit (oneshot) waits for
 `/sys/class/remoteproc/remoteproc0/state` to appear and then writes `start`,
 which makes the kernel load that ELF into the E906.
 
-Only one firmware can be the boot firmware. To switch to another example:
+The one-command way to make **sysmon** the boot firmware (on a freshly flashed
+system or any running one):
+
+```sh
+git clone https://github.com/juanesf/e906-examples.git
+cd e906-examples && sudo ./deploy-sysmon.sh
+```
+
+It installs `sysmon/e906-sysmon.elf` as the boot firmware (prebuilt in the
+repo), the two systemd units and the `mbox_sysmon.py` daemon, then enables
+them. The ELF is loaded by `e906-rproc.service` and the metrics are pushed by
+`e906-sysmon.service` at every boot.
+
+Only one firmware can be the boot firmware. To switch to another example
+manually:
 
 ```sh
 sudo cp /lib/firmware/rproc-7130000.e906_rproc-fw{,.prev}   # keep current

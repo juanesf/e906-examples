@@ -4,3 +4,4 @@ __pycache__/
 *.bin
 *.lst
 *:Zone.Identifier
+!sysmon/e906-sysmon.elf

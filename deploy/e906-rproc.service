@@ -1,0 +1,11 @@
+[Unit]
+Description=Start E906 RISC-V remoteproc firmware
+Before=e906-sysmon.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/e906-rproc-start.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
