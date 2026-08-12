@@ -186,6 +186,8 @@ Mailbox v3 layout (reserved DDR @ 0x60000000, all offsets 4-byte aligned):
 > subset of the Klipper MCU protocol, and it is not production code. You are
 > free to use it as a base to create or improve your own implementation.
 
+![E906 co-processor / MCU (Sun55i A527)](klipper/klipper-e906-mcu-sun55i-a527.jpeg)
+
 First Klipper building block on the E906: a step/dir stepper driver, a
 software-PWM heater/fan and a homing/endstop block, commanded over
 **S-UART0 @ 115200 8N1** (the same serial as `hello`, TX on header pin
