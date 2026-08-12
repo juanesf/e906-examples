@@ -430,8 +430,9 @@ gcode queue, and remember the whole setup is a proof of concept.
 ## Acknowledgements
 
 Investigation and on-board testing for these examples (the E906 cache root
-cause, the mailbox protocol, the ST7789V wiring and the sysmon daemon) were
-carried out with the assistance of opencode.
+cause, the mailbox protocol, the ST7789V wiring, the sysmon daemon and the
+Klipper MCU bridge integration) were carried out with the assistance of
+opencode.
 
 ## License
 
