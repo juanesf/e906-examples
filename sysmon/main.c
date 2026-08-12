@@ -42,6 +42,26 @@
 static volatile unsigned int *const mbox =
     (volatile unsigned int *)MBOX_BASE;
 
+/* T-Head dcache.ipa: invalidate ONE D-cache line by physical address.  The
+ * ARM writes the mailbox through an uncached /dev/mem mapping, but this
+ * core's write-through D-cache can keep a stale copy of the ARM-written
+ * fields (seq, metrics), so they would never refresh.  Invalidate only the
+ * DDR mailbox lines -- never dcache.iall: it drops dirty SRAM0 lines and
+ * crashes the core (found on the board). */
+static inline void dcache_ipa(unsigned int pa)
+{
+	__asm__ volatile(".insn i 0x0B, 0, x0, %0, 0x02A" :: "r"(pa) : "memory");
+}
+
+/* invalidate the lines covering +0x00..+0x1F, +0x20..+0x3F and +0x40..+0x5F
+ * (covers every ARM-written field regardless of the line size) */
+static inline void dcache_inval_mbox(void)
+{
+	dcache_ipa(MBOX_BASE + 0x00UL);
+	dcache_ipa(MBOX_BASE + 0x20UL);
+	dcache_ipa(MBOX_BASE + 0x40UL);
+}
+
 #define S_GPIO_BASE  0x07022000UL
 #define S_UART0_BASE 0x07080000UL
 #define STBY_PRCM    0x07010000UL
@@ -611,7 +631,10 @@ static void arm_read_line(unsigned int line, char *out)
 
 static void read_stats(void)
 {
-	unsigned int seq = mbox[16];	/* +0x40 */
+	unsigned int seq;
+
+	dcache_inval_mbox();	/* drop stale ARM-written fields */
+	seq = mbox[16];		/* +0x40 */
 
 	load1x = mbox[6];		/* +0x18 */
 	load5x = mbox[7];		/* +0x1C */

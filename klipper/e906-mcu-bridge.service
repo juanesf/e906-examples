@@ -1,0 +1,14 @@
+[Unit]
+Description=E906 Klipper MCU bridge
+After=e906-rproc.service
+Wants=e906-rproc.service
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /usr/local/bin/e906_mcu_bridge.py
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target

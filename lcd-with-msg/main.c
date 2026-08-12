@@ -59,6 +59,28 @@ static volatile unsigned int *const mbox =
 #define TEXT_LINES   4
 #define TEXT_LINE_LEN 32
 
+/* T-Head dcache.ipa: invalidate ONE D-cache line by physical address.  The
+ * ARM writes seq/text through an uncached /dev/mem mapping, but this core's
+ * write-through D-cache can hold a stale copy of those lines, so the panel
+ * would freeze on the first version.  Invalidate only the DDR mailbox
+ * lines -- never dcache.iall: it drops dirty SRAM0 lines and crashes the
+ * core (found on the board). */
+static inline void dcache_ipa(unsigned int pa)
+{
+	__asm__ volatile(".insn i 0x0B, 0, x0, %0, 0x02A" :: "r"(pa) : "memory");
+}
+
+/* lines covering seq (+0x40) and the text panel (+0x44..+0xC4), for any
+ * line size >= 32 bytes */
+static inline void dcache_inval_mbox(void)
+{
+	dcache_ipa(MBOX_BASE + 0x40UL);
+	dcache_ipa(MBOX_BASE + 0x60UL);
+	dcache_ipa(MBOX_BASE + 0x80UL);
+	dcache_ipa(MBOX_BASE + 0xA0UL);
+	dcache_ipa(MBOX_BASE + 0xC0UL);
+}
+
 #define S_GPIO_BASE  0x07022000UL
 #define S_UART0_BASE 0x07080000UL
 #define STBY_PRCM    0x07010000UL
@@ -572,8 +594,11 @@ static unsigned int last_seq;
 
 static void poll_arm_text(void)
 {
-	unsigned int seq = *(volatile unsigned int *)MBOX_ARM_SEQ;
+	unsigned int seq;
 	int l;
+
+	dcache_inval_mbox();	/* drop stale ARM-written lines */
+	seq = *(volatile unsigned int *)MBOX_ARM_SEQ;
 
 	if (seq == last_seq)
 		return;

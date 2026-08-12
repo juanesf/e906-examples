@@ -1,0 +1,13 @@
+[Unit]
+Description=Klipper 3D printer host (E906 example)
+After=e906-mcu-bridge.service network.target
+
+[Service]
+Type=simple
+User=avaota
+ExecStart=/home/avaota/klippy-env/bin/python /home/avaota/klipper/klippy/klippy.py /usr/local/etc/e906-klipper/printer.cfg -l /tmp/klippy.log
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

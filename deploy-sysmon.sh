@@ -16,8 +16,8 @@ cd "$(dirname "$(readlink -f "$0")")"
 FW=/lib/firmware/rproc-7130000.e906_rproc-fw
 ELF=sysmon/e906-sysmon.elf
 
-[ "$(id -u)" -eq 0 ] || { echo "Ejecutar con sudo." >&2; exit 1; }
-[ -f "$ELF" ] || { echo "Falta $ELF (./compile-sysmon en el host)." >&2; exit 1; }
+[ "$(id -u)" -eq 0 ] || { echo "Run with sudo." >&2; exit 1; }
+[ -f "$ELF" ] || { echo "Missing $ELF (run ./compile-sysmon on the host)." >&2; exit 1; }
 
 install -m 0644 "$ELF" "$FW"                          # boot firmware
 install -m 0755 deploy/e906-rproc-start.sh /usr/local/bin/
@@ -28,4 +28,4 @@ install -m 0644 sysmon/mbox_sysmon.py       /usr/local/bin/mbox_sysmon.py
 systemctl daemon-reload
 systemctl enable --now e906-rproc e906-sysmon
 
-echo "OK: dashboard E906 desplegado. Se inicia en el próximo boot."
+echo "OK: E906 sysmon dashboard deployed. It will start on the next boot."

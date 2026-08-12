@@ -1,0 +1,6 @@
+#!/bin/bash
+# Build the E906 "klipper" (stepper/PWM) example (A523/T527 co-processor).
+set -e
+cd "$(dirname "$(readlink -f "$0")")/klipper"
+make -s all
+echo "OK: $(pwd)/e906-klipper.elf"

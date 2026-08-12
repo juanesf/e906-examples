@@ -5,3 +5,4 @@ __pycache__/
 *.lst
 *:Zone.Identifier
 !sysmon/e906-sysmon.elf
+!klipper/e906-klipper.elf
